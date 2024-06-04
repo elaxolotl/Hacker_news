@@ -2,10 +2,10 @@ import './App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-const List = (props) => (
+const List = ({ list, onRemoveItem }) => (
   <ul>
-    {props.list.map((item) => (
-      <Item key={item.objectID} item={item} />
+    {list.map((item) => (
+      <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
     ))}
   </ul>
 )
@@ -18,23 +18,33 @@ const Item = (list) => (
     <span>{list.item.author}</span>
     <span>{list.item.num_comments}</span>
     <span>{list.item.points}</span>
+    <span>
+      <button type="button" onClick={() => onRemoveItem(item)}>
+        Dismiss
+      </button>
+    </span>
   </li>
 );
 
-const Search = (props) => {
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
-    props.onSearch(event)
-  }
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" value={props.search} onChange={props.onSearch} />
-    </div>)
-};
+const InputWithLabel = ({
+  id,
+  value,
+  onInputChange,
+  children,
+}) => (
+  <>
+    <label htmlFor={id}>{children}</label>
+    &nbsp;
+    <input
+      id={id}
+      type="text"
+      value={value}
+      onChange={onInputChange} />
+  </>
+);
 
 const App = () => {
-  const stories = [
+  const initialStories = [
     {
       title: "React",
       url: "https://reactjs.org/",
@@ -52,9 +62,16 @@ const App = () => {
       objectID: 1,
     },
   ];
+  const [stories, setStories] = useState(initialStories);
   const [searchTerm, setSearchTerm] = useState(localStorage.getItem('search') || 'React');
+  const handleRemoveStory = (item) => {
+    const newStories = stories.filter(
+      (story) => item.objectID !== story.objectID
+    );
+    setStories(newStories)
+  }
 
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.setItem('search', searchTerm);
   }, [searchTerm])
 
@@ -67,9 +84,15 @@ const App = () => {
   return (
     <div>
       <h1>Hacker stories</h1>
-      <Search onSearch={handleSearch} search={searchTerm}/>
+      <InputWithLabel
+        id="search"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      >
+        <strong>Search:</strong>
+      </InputWithLabel>
       <hr />
-      <List list={searchedStories} search={searchTerm} />
+      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 }
