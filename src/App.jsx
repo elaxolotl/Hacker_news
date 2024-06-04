@@ -1,5 +1,6 @@
 import './App.css'
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const List = (props) => (
   <ul>
@@ -21,7 +22,6 @@ const Item = (list) => (
 );
 
 const Search = (props) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     props.onSearch(event)
@@ -29,7 +29,7 @@ const Search = (props) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={props.onSearch} />
+      <input id="search" type="text" value={props.search} onChange={props.onSearch} />
     </div>)
 };
 
@@ -52,7 +52,12 @@ const App = () => {
       objectID: 1,
     },
   ];
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(localStorage.getItem('search') || 'React');
+
+  useEffect(()=>{
+    localStorage.setItem('search', searchTerm);
+  }, [searchTerm])
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value)
   }
@@ -62,9 +67,9 @@ const App = () => {
   return (
     <div>
       <h1>Hacker stories</h1>
-      <Search onSearch={handleSearch}/>
+      <Search onSearch={handleSearch} search={searchTerm}/>
       <hr />
-      <List list={searchedStories} />
+      <List list={searchedStories} search={searchTerm} />
     </div>
   );
 }
