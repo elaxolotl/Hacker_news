@@ -1,7 +1,7 @@
 import './App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { IoMdPerson } from "react-icons/io";
+import { GoPersonFill } from "react-icons/go";
 import { FaCommentDots, FaHeart } from "react-icons/fa";
 import Skeleton from '@mui/material/Skeleton';
 
@@ -17,7 +17,7 @@ const List = ({ list, onRemoveItem }) => (
 
 const Item = ({ item, onRemoveItem }) => (
   <li className='list-item' key={item.objectID}>
-    <span><IoMdPerson  id='icon' />{item.author}</span><br />
+    <span><GoPersonFill id='icon'/>{item.author}</span><br />
     <span>
       <a href={item.url}>{item.title} </a>
     </span><br />
