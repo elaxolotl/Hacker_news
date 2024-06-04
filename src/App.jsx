@@ -20,7 +20,7 @@ const Item = (list) => (
   </li>
 );
 
-const Search = () => {
+const Search = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -29,8 +29,7 @@ const Search = () => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange} />
-      <p>Searcing for <strong>{searchTerm}</strong></p>
+      <input id="search" type="text" onChange={props.onSearch} />
     </div>)
 };
 
@@ -53,15 +52,19 @@ const App = () => {
       objectID: 1,
     },
   ];
+  const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = (event) => {
-    console.log(event.target.value)
+    setSearchTerm(event.target.value)
   }
+  const searchedStories = stories.filter(function (story) {
+    return story.title.toLowerCase().includes(searchTerm.toLowerCase());
+  })
   return (
     <div>
       <h1>Hacker stories</h1>
       <Search onSearch={handleSearch}/>
       <hr />
-      <List list={stories} />
+      <List list={searchedStories} />
     </div>
   );
 }
