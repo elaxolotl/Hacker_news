@@ -1,6 +1,10 @@
 import './App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { FaCommentDots, FaHeart } from "react-icons/fa";
+import Skeleton from '@mui/material/Skeleton';
+
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
 const List = ({ list, onRemoveItem }) => (
@@ -11,14 +15,14 @@ const List = ({ list, onRemoveItem }) => (
   </ul>
 )
 
-const Item = ({item, onRemoveItem}) => (
-  <li key={item.objectID}>
+const Item = ({ item, onRemoveItem }) => (
+  <li className='list-item' key={item.objectID}>
+    <span className='author'><IoPersonCircleSharp id='icon' />{item.author}</span><br />
     <span>
       <a href={item.url}>{item.title} </a>
-    </span>
-    <span>{item.author}</span>
-    <span>{item.num_comments}</span>
-    <span>{item.points}</span>
+    </span><br />
+    <span><FaCommentDots id='icon' />{item.num_comments}</span>&nbsp;
+    <span className='likes'><FaHeart id='icon' />{item.points}</span>
     <span>
       <button type="button" onClick={() => onRemoveItem(item)}>
         Dismiss
@@ -32,6 +36,7 @@ const InputWithLabel = (props) => (
     <label htmlFor={props.id}>{props.children}</label>
     &nbsp;
     <input
+      placeholder='write anything here...'
       id={props.id}
       type="text"
       value={props.value}
@@ -81,24 +86,31 @@ const App = () => {
 
   return (
     <div>
-      <h1>Hacker stories</h1>
-      <InputWithLabel
-        id="search"
-        value={searchTerm}
-        onInputChange={handleSearch}
-      >
-        <strong>Search:</strong>
-      </InputWithLabel>
-      <button
-        type="button"
-        disabled={!searchTerm}
-        onClick={handleSearchSubmit}
-      >
-        Submit
-      </button>
+      <div className='hero'>
+        <h1><span>Hacker</span> stories</h1>
+        <h4>The latest tech news</h4>
+      </div>
+      <div className="search">
+        <InputWithLabel
+          id="search"
+          value={searchTerm}
+          onInputChange={handleSearch}
+        >
+          <strong>Search:</strong>
+        </InputWithLabel>
+        <button
+          type="button"
+          disabled={!searchTerm}
+          onClick={handleSearchSubmit}
+        >
+          Submit
+        </button>
+      </div>
       <hr />
       {isError && <p>Something went wrong ...</p>}
-      {isLoading ? (<p>Loading ...</p>) : (<List list={stories} onRemoveItem={handleRemoveStory} />)}
+      {isLoading ? (<><Skeleton animation="wave" sx={{ bgcolor: 'grey.900' }} height={100} />
+        <Skeleton animation="wave" sx={{ bgcolor: 'grey.900' }} height={100} />
+        <Skeleton animation="wave" sx={{ bgcolor: 'grey.900' }} height={100} /></>) : (<List list={stories} onRemoveItem={handleRemoveStory} />)}
     </div>
   );
 }
