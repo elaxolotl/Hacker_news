@@ -1,6 +1,7 @@
 import './App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
+const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
 const List = ({ list, onRemoveItem }) => (
   <ul>
@@ -44,25 +45,7 @@ const InputWithLabel = ({
 );
 
 const App = () => {
-  const initialStories = [
-    {
-      title: "React",
-      url: "https://reactjs.org/",
-      author: "Jordan Walke",
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: "Redux",
-      url: "https://redux.js.org/",
-      author: "Dan Abramov, Andrew Clark",
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ];
-  const [stories, setStories] = useState(initialStories);
+  const [stories, setStories] = useState([]);
   const [searchTerm, setSearchTerm] = useState(localStorage.getItem('search') || 'React');
   const handleRemoveStory = (item) => {
     const newStories = stories.filter(
@@ -78,9 +61,18 @@ const App = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value)
   }
-  const searchedStories = stories.filter(function (story) {
-    return story.title.toLowerCase().includes(searchTerm.toLowerCase());
-  })
+  useEffect(() => {
+    if (!searchTerm) return;
+    fetch(`${API_ENDPOINT}${searchTerm}`)
+      .then((response) => response.json())
+      .then((result) => {
+        setStories(result.hits);
+      })
+
+      .catch(() => {
+        //Handle Error
+      });
+  }, [searchTerm]);
   return (
     <div>
       <h1>Hacker stories</h1>
@@ -92,7 +84,7 @@ const App = () => {
         <strong>Search:</strong>
       </InputWithLabel>
       <hr />
-      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
+      <List list={stories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 }
