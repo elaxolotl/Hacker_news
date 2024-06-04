@@ -11,14 +11,14 @@ const List = ({ list, onRemoveItem }) => (
   </ul>
 )
 
-const Item = (list) => (
-  <li key={list.item.objectID}>
+const Item = ({item, onRemoveItem}) => (
+  <li key={item.objectID}>
     <span>
-      <a href={list.item.url}>{list.item.title} </a>
+      <a href={item.url}>{item.title} </a>
     </span>
-    <span>{list.item.author}</span>
-    <span>{list.item.num_comments}</span>
-    <span>{list.item.points}</span>
+    <span>{item.author}</span>
+    <span>{item.num_comments}</span>
+    <span>{item.points}</span>
     <span>
       <button type="button" onClick={() => onRemoveItem(item)}>
         Dismiss
@@ -27,20 +27,15 @@ const Item = (list) => (
   </li>
 );
 
-const InputWithLabel = ({
-  id,
-  value,
-  onInputChange,
-  children,
-}) => (
+const InputWithLabel = (props) => (
   <>
-    <label htmlFor={id}>{children}</label>
+    <label htmlFor={props.id}>{props.children}</label>
     &nbsp;
     <input
-      id={id}
+      id={props.id}
       type="text"
-      value={value}
-      onChange={onInputChange} />
+      value={props.value}
+      onChange={props.onInputChange} />
   </>
 );
 
