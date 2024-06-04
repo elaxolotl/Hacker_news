@@ -26,34 +26,35 @@ function getTitle(title) {
   return title;
 }
 
-function List() {
-  return (<ul>
-    {list.map(function (item) {
-      return (
-        <li>{item.title}</li>
-      );
-    })}
-  </ul>)
-}
+const List = () => (
+  <ul>
+    {list.map((item) => (
+        <li key={item.objectID}>
+          <span>
+            <a href={item.url}>{item.title} </a>
+          </span>
+          <span>{item.author}</span>
+          <span>{item.num_comments}</span>
+          <span>{item.points}</span>
+        </li>
+      ))}
+  </ul>
+)
 
-function Search(){
-  return (
+const Search = () => (
     <div>
-        <label htmlFor="search">Search: </label>
-        <input id="search" type="text" />
+      <label htmlFor="search">Search: </label>
+      <input id="search" type="text" />
     </div>
-  );
-};
+);
 
-function App() {
-  return (
+const App = () => (
     <div>
       <h1>Hello {getTitle("React")}</h1>
-      <Search/>
+      <Search />
       <hr />
       <List />
     </div>
   )
-}
 
 export default App
