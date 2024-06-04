@@ -45,8 +45,10 @@ const InputWithLabel = ({
 );
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const [stories, setStories] = useState([]);
   const [searchTerm, setSearchTerm] = useState(localStorage.getItem('search') || 'React');
+  const [isError, setIsError] = useState(false);
   const handleRemoveStory = (item) => {
     const newStories = stories.filter(
       (story) => item.objectID !== story.objectID
@@ -63,14 +65,17 @@ const App = () => {
   }
   useEffect(() => {
     if (!searchTerm) return;
+    setIsLoading(true)
     fetch(`${API_ENDPOINT}${searchTerm}`)
       .then((response) => response.json())
       .then((result) => {
+        setIsLoading(false)
         setStories(result.hits);
       })
 
       .catch(() => {
-        //Handle Error
+        setIsLoading(false);
+        setIsError(true);
       });
   }, [searchTerm]);
   return (
@@ -84,7 +89,9 @@ const App = () => {
         <strong>Search:</strong>
       </InputWithLabel>
       <hr />
-      <List list={stories} onRemoveItem={handleRemoveStory} />
+      {isError && <p>Something went wrong ...</p>}
+      {isLoading ? (<p>Loading ...</p>) : (<List list={stories} onRemoveItem={handleRemoveStory} />)}
+
     </div>
   );
 }
