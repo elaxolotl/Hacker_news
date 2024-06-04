@@ -49,6 +49,7 @@ const App = () => {
   const [stories, setStories] = useState([]);
   const [searchTerm, setSearchTerm] = useState(localStorage.getItem('search') || 'React');
   const [isError, setIsError] = useState(false);
+  const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
   const handleRemoveStory = (item) => {
     const newStories = stories.filter(
       (story) => item.objectID !== story.objectID
@@ -66,7 +67,7 @@ const App = () => {
   useEffect(() => {
     if (!searchTerm) return;
     setIsLoading(true)
-    fetch(`${API_ENDPOINT}${searchTerm}`)
+    fetch(url)
       .then((response) => response.json())
       .then((result) => {
         setIsLoading(false)
@@ -77,7 +78,12 @@ const App = () => {
         setIsLoading(false);
         setIsError(true);
       });
-  }, [searchTerm]);
+  }, [url]);
+
+  const handleSearchSubmit = () => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
+  };
+
   return (
     <div>
       <h1>Hacker stories</h1>
@@ -88,10 +94,16 @@ const App = () => {
       >
         <strong>Search:</strong>
       </InputWithLabel>
+      <button
+        type="button"
+        disabled={!searchTerm}
+        onClick={handleSearchSubmit}
+      >
+        Submit
+      </button>
       <hr />
       {isError && <p>Something went wrong ...</p>}
       {isLoading ? (<p>Loading ...</p>) : (<List list={stories} onRemoveItem={handleRemoveStory} />)}
-
     </div>
   );
 }
