@@ -1,4 +1,5 @@
 import './App.css'
+import { useState } from 'react';
 
 function getTitle(title) {
   return title;
@@ -23,12 +24,18 @@ const Item = (list) => (
   </li>
 );
 
-const Search = () => (
-  <div>
-    <label htmlFor="search">Search: </label>
-    <input id="search" type="text" />
-  </div>
-);
+const Search = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  }
+  return (
+    <div>
+      <label htmlFor="search">Search: </label>
+      <input id="search" type="text" onChange={handleChange} />
+      <p>Searcing for <strong>{searchTerm}</strong></p>
+    </div>)
+};
 
 const App = () => {
   const stories = [
