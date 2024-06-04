@@ -1,7 +1,7 @@
 import './App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { IoPersonCircleSharp } from "react-icons/io5";
+import { IoMdPerson } from "react-icons/io";
 import { FaCommentDots, FaHeart } from "react-icons/fa";
 import Skeleton from '@mui/material/Skeleton';
 
@@ -17,7 +17,7 @@ const List = ({ list, onRemoveItem }) => (
 
 const Item = ({ item, onRemoveItem }) => (
   <li className='list-item' key={item.objectID}>
-    <span className='author'><IoPersonCircleSharp id='icon' />{item.author}</span><br />
+    <span><IoMdPerson  id='icon' />{item.author}</span><br />
     <span>
       <a href={item.url}>{item.title} </a>
     </span><br />
