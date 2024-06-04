@@ -88,7 +88,7 @@ const App = () => {
     <div>
       <div className='hero'>
         <h1><span>Hacker</span> stories</h1>
-        <h4>The latest tech news</h4>
+        <p>The latest tech news</p>
       </div>
       <div className="search">
         <InputWithLabel
