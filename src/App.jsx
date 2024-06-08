@@ -1,9 +1,11 @@
 import './App.css'
+import Skeleton from '@mui/material/Skeleton';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { GoPersonFill } from "react-icons/go";
-import { FaCommentDots, FaHeart } from "react-icons/fa";
-import Skeleton from '@mui/material/Skeleton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faComment } from '@fortawesome/free-solid-svg-icons'
+import { faCircleUser } from '@fortawesome/free-solid-svg-icons'
 
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
@@ -17,12 +19,12 @@ const List = ({ list, onRemoveItem }) => (
 
 const Item = ({ item, onRemoveItem }) => (
   <li className='list-item' key={item.objectID}>
-    <span><GoPersonFill id='icon'/>{item.author}</span><br />
+    <span><FontAwesomeIcon id="icon" icon={faCircleUser} />{item.author}</span><br />
     <span>
       <a href={item.url}>{item.title} </a>
     </span><br />
-    <span><FaCommentDots id='icon' />{item.num_comments}</span>&nbsp;
-    <span className='likes'><FaHeart id='icon' />{item.points}</span>
+    <span><FontAwesomeIcon id="icon" icon={faComment} />{item.num_comments}</span>&nbsp;
+    <span className='likes'><FontAwesomeIcon id='icon' icon={faHeart} />{item.points}</span>
     <span>
       <button type="button" onClick={() => onRemoveItem(item)}>
         Dismiss
